@@ -5,8 +5,9 @@ using UnityEngine;
 public class DoorCloseTrigger : MonoBehaviour
 {
     Player m_Player;
-    [SerializeField] GameObject m_Key;
-    Key m_Key2;
+    Key m_Key;
+    Door m_Door;
+    [SerializeField] GameObject m_KeyObj;
     [SerializeField] GameObject m_HiddenDoor1;
     [SerializeField] GameObject m_HiddenDoor2;
     //List<int> m_List;
@@ -14,15 +15,16 @@ public class DoorCloseTrigger : MonoBehaviour
     void Start()
     {
         //door
-		//m_List.ForEach();
+        //m_Door = m_Door.gameObject.GetComponent<Door>();
+        //m_Key = GameObject.Find("rust_key").GetComponent<Key>();
     }
 
     private void OnTriggerStay(Collider other)
     {
-        if(other.gameObject.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Player") && m_KeyObj != null)
         {
-            //m_Key.gameObject.SetActive(true);
-            m_Key2.gameObject.SetActive(true);
+            m_KeyObj.SetActive(true);
+            //m_Key.GetKey();                     //이 부분 왜 안될까요?
             m_HiddenDoor1.GetComponent<Door>().IsOpen = false;
             m_HiddenDoor2.GetComponent<Door>().IsOpen = false;
 

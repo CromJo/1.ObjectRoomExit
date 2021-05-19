@@ -11,15 +11,15 @@ public class Door : MonoBehaviour
 
     bool m_isOpen = false;          //연 상태인지 확인하는 변수
     public bool IsOpen { get{ return m_isOpen; } set { m_isOpen = value; } }
-
+    [SerializeField] bool m_canOpen;
     DoorCloseTrigger m_CloseDoor;
 
-
+    Player m_Player;
     // Start is called before the first frame update
     void Start()
     {
-        if (gameObject.name.EndsWith("b")) m_DoorOpen = -90f; 
-        
+        if (gameObject.name.EndsWith("b")) m_DoorOpen = -90f;
+        m_Player = GameObject.Find("Player").GetComponent<Player>();
     }
 
     // Update is called once per frame
@@ -37,7 +37,12 @@ public class Door : MonoBehaviour
             Debug.Log("닫쳤다");
             Quaternion targetRotation = Quaternion.Euler(0f, m_DoorClose, 0f);                                                          //문열기
             transform.localRotation = Quaternion.Slerp(transform.localRotation, targetRotation, (m_OpenCloseTime * Time.deltaTime) * 4);  //문열기
- 
+
+            m_canOpen = false;
+            //if(m_Player.IsGetKey == true)
+            //{
+            //    m_canOpen = true;
+			//}
         }
     }
 

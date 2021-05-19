@@ -47,7 +47,7 @@ public class Player : MonoBehaviour
         float v = Input.GetAxis("Vertical");                //인풋 매니저 값 받아오기
         Vector3 moveDir = new Vector3(h, 0f, v);            //동적할당 하여 wasd키 값을 moveDir에 넣어주기
         moveDir = transform.TransformDirection(moveDir);    //월드좌표계로 바꿔준다.
-        m_Rigidbody.velocity = moveDir * m_Speed * Time.deltaTime;
+        m_Rigidbody.velocity = moveDir * m_Speed;
     }
 
     void UpdateRayInput()                                                                   //레이캐스트 관련함수
@@ -75,6 +75,16 @@ public class Player : MonoBehaviour
 
                     }
                 }
+
+                if(hit.collider.CompareTag("Key"))
+                {
+                    Key key = hit.collider.GetComponent<Key>();
+                    if(key)
+                    {
+                        m_isGetKey = true;
+                        key.PickUpKey();
+					}
+				}
             }
         }
         else if(Input.GetMouseButtonUp(0))                                                  //만약 윗 문장이 충족되지 않고 이 문장만 충족되었다면

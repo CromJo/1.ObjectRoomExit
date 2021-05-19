@@ -25,14 +25,12 @@ public class Key : MonoBehaviour
 
     public void PickUpKey()
     {
-        m_Player.IsGetKey = true;
-        Destroy(this);
-
+        Destroy(gameObject);
 	}
 
     public void GetKey()
     {
-        
+        gameObject.SetActive(true);
     }
     
 }

@@ -6,11 +6,12 @@ TagManager:
   tags:
   - water
   - wood
-  - fourthIU
   - IU
   - flash
   - Door
   - KeyDoor
+  - HiddenDoor
+  - Key
   layers:
   - Default
   - TransparentFX
