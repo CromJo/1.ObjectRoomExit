@@ -9,9 +9,9 @@ public class Key : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        gameObject.SetActive(false);
+        gameObject.GetComponent<MeshRenderer>().enabled = false;
         m_KeyActive = false;
-        m_Player = m_Player.gameObject.transform.GetComponent<Player>();
+        //m_Player = m_Player.gameObject.transform.GetComponent<Player>();
     }
 
     // Update is called once per frame
@@ -25,12 +25,12 @@ public class Key : MonoBehaviour
 
     public void PickUpKey()
     {
-        Destroy(gameObject);
+        gameObject.GetComponent<MeshRenderer>().enabled = false;
 	}
 
     public void GetKey()
     {
-        gameObject.SetActive(true);
+        gameObject.GetComponent<MeshRenderer>().enabled = true;
     }
-    
+
 }

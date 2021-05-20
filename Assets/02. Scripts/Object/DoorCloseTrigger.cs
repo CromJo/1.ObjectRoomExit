@@ -7,7 +7,7 @@ public class DoorCloseTrigger : MonoBehaviour
     Player m_Player;
     Key m_Key;
     Door m_Door;
-    [SerializeField] GameObject m_KeyObj;
+    //[SerializeField] GameObject m_KeyObj;
     [SerializeField] GameObject m_HiddenDoor1;
     [SerializeField] GameObject m_HiddenDoor2;
     //List<int> m_List;
@@ -16,21 +16,31 @@ public class DoorCloseTrigger : MonoBehaviour
     {
         //door
         //m_Door = m_Door.gameObject.GetComponent<Door>();
-        //m_Key = GameObject.Find("rust_key").GetComponent<Key>();
+        m_Key = GameObject.Find("rust_key").GetComponent<Key>();
+    }
+
+    private void Update()
+    {
+        
     }
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.CompareTag("Player") && m_KeyObj != null)
+        if (other.gameObject.CompareTag("Player") && m_Key != null)
         {
-            m_KeyObj.SetActive(true);
-            //m_Key.GetKey();                     //이 부분 왜 안될까요?
+            //m_KeyObj.SetActive(true);
+            m_Key.GetKey();                     //이 부분 왜 안될까요?
             m_HiddenDoor1.GetComponent<Door>().IsOpen = false;
             m_HiddenDoor2.GetComponent<Door>().IsOpen = false;
 
             m_HiddenDoor1.GetComponent<Door>().Hidden3Door();
             m_HiddenDoor2.GetComponent<Door>().Hidden3Door();
         }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        gameObject.GetComponent<MeshCollider>().enabled = false;
     }
 
 }

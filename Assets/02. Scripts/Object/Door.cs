@@ -12,6 +12,7 @@ public class Door : MonoBehaviour
     bool m_isOpen = false;          //연 상태인지 확인하는 변수
     public bool IsOpen { get{ return m_isOpen; } set { m_isOpen = value; } }
     [SerializeField] bool m_canOpen;
+    public bool canOpen { get { return m_canOpen; } set { m_canOpen = value; } }
     DoorCloseTrigger m_CloseDoor;
 
     Player m_Player;
@@ -19,7 +20,7 @@ public class Door : MonoBehaviour
     void Start()
     {
         if (gameObject.name.EndsWith("b")) m_DoorOpen = -90f;
-        m_Player = GameObject.Find("Player").GetComponent<Player>();
+        m_Player = GameObject.Find("FPSController").GetComponent<Player>();
     }
 
     // Update is called once per frame
@@ -39,10 +40,14 @@ public class Door : MonoBehaviour
             transform.localRotation = Quaternion.Slerp(transform.localRotation, targetRotation, (m_OpenCloseTime * Time.deltaTime) * 4);  //문열기
 
             m_canOpen = false;
-            //if(m_Player.IsGetKey == true)
-            //{
-            //    m_canOpen = true;
-			//}
+        }
+    }
+
+    public void HiddenDoorOpen()
+    {
+        if(CompareTag("HiddenDoor") && m_Player.IsGetKey == true)
+        {
+            m_canOpen = true;
         }
     }
 
@@ -58,13 +63,18 @@ public class Door : MonoBehaviour
 
     public void OpenAndClose()
     {
-        if (m_isOpen && CompareTag("Door"))
+        if (m_canOpen && (CompareTag("Door") || CompareTag("HiddenDoor") || CompareTag("KeyDoor")))
         {
-            //Debug.Log("열렸다");
-            Quaternion targetRotation = Quaternion.Euler(0f, m_DoorOpen, 0f);                                                       //문열기
-            transform.localRotation = Quaternion.Slerp(transform.localRotation, targetRotation, m_OpenCloseTime * Time.deltaTime);  //문열기
+            if (m_canOpen)
+            {
+                //Debug.Log("열렸다");
+                Quaternion targetRotation = Quaternion.Euler(0f, m_DoorOpen, 0f);                                                       //문열기
+                transform.localRotation = Quaternion.Slerp(transform.localRotation, targetRotation, m_OpenCloseTime * Time.deltaTime);  //문열기
+            }
+            
+            
         }
-        else if (!m_isOpen && CompareTag("Door"))
+        else if (!m_canOpen && CompareTag("Door"))
         {
             //Debug.Log("닫혔다");
             Quaternion targetRotation = Quaternion.Euler(0f, m_DoorClose, 0f);                                                      //문닫기

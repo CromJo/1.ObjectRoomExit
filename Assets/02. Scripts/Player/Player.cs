@@ -14,16 +14,18 @@ public class Player : MonoBehaviour
     [SerializeField] GameObject m_RayPos;
 
     //열쇠 관련
-    Key m_Key;
     bool m_isGetKey = false;
     public bool IsGetKey { get { return m_isGetKey; } set { m_isGetKey = value; } }
     // Start is called before the first frame update
 
     InteractionDoor m_door;
+    Door m_JoDoor;
 
     void Start()
     {
         m_Rigidbody = GetComponent<Rigidbody>();
+
+        m_JoDoor = GameObject.Find("connectorFloor1-1").GetComponentInChildren<Door>();
     }
 
 
@@ -39,7 +41,7 @@ public class Player : MonoBehaviour
         UpdateRayInput();
         //UpdateObjectInput();
     }
-
+    
 
     public void UpdateMoveInput()
     {
@@ -52,11 +54,30 @@ public class Player : MonoBehaviour
 
     void UpdateRayInput()                                                                   //레이캐스트 관련함수
     {
-        if(Input.GetMouseButtonDown(0))                                                     //왼클 했을 경우
+        Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);   //광선은 카메라 포지션의 위치해서 앞으로 나아간다.라는 내용을 가진 변수생성
+        RaycastHit hit;                                                                     //변수 하나 생성
+        if (Physics.Raycast(ray, out hit, m_MaxDistance))                               //광선이 앞으로 나아가며 MaxDistance만큼의 길이를 가지고 있다.
         {
-            Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);//광선은 카메라 포지션의 위치해서 앞으로 나아간다.라는 내용을 가진 변수생성
-            RaycastHit hit;                                                                 //변수 하나 생성
-            if (Physics.Raycast(ray, out hit, m_MaxDistance))                               //광선이 앞으로 나아가며 MaxDistance만큼의 길이를 가지고 있다.
+            UIManager text = GameObject.Find("StateText").GetComponent<UIManager>();
+            Debug.Log("여기까지 오니?");
+            
+            text.UpdateState(UIManager.TextState.None);
+            if (hit.collider.CompareTag("Door"))
+            {
+                text.UpdateState(UIManager.TextState.DoorOpenAndClose);
+            }
+            else if(hit.collider.CompareTag("HiddenDoor") || hit.collider.CompareTag("KeyDoor"))
+            {
+                if(m_isGetKey)
+                {
+                    text.UpdateState(UIManager.TextState.GetKeyOpenDoor);
+                }
+                else
+                {
+                    text.UpdateState(UIManager.TextState.DoorLock);
+                }
+            }
+            if (Input.GetMouseButtonDown(0))                                                    //왼클 했을 경우
             {
                 if (hit.collider.CompareTag("Door"))                                        //태그가 도어라면 (광선이 태그에 맞았다면)
                 {
@@ -65,6 +86,7 @@ public class Player : MonoBehaviour
                     {
                         if(door.canOpen == true)                                            //열수 있는 상태라면
                         {
+                            //text.UpdateState(UIManager.TextState.DoorOpenAndClose);
                             m_door = door;                                                  //광선에 맞은 문의 콜라이더가 미리 만든 변수에 넣어둔다
                             Camera.main.GetComponent<FirstPersonCamera>().enabled = false;  //그리고 내 카메라 기능을 잠시 비활성화 시킨다.
                         }
@@ -75,23 +97,43 @@ public class Player : MonoBehaviour
 
                     }
                 }
-
-                if(hit.collider.CompareTag("Key"))
+                else if(hit.collider.CompareTag("HiddenDoor"))
                 {
-                    Key key = hit.collider.GetComponent<Key>();
-                    if(key)
+                    m_JoDoor = hit.collider.GetComponent<Door>();
+                    if (m_JoDoor)
                     {
-                        m_isGetKey = true;
+                        //text.UpdateState(UIManager.TextState.GetKeyOpenDoor);
+                        m_JoDoor.HiddenDoorOpen();
+                        m_JoDoor.OpenAndClose();
+                    }
+                    else if(!m_isGetKey)
+                    {   
+                        //text.UpdateState(UIManager.TextState.DoorLock);
+                    }
+                }
+
+                if (hit.collider.CompareTag("Key"))                  //키태그를 가지고 있는거라면
+                {
+                    Key key = hit.collider.GetComponent<Key>();     //광선에 닿은 것의 스크립트를 키에 넣어준다
+                    //m_JoDoor = hit.collider.GetComponent<Door>();
+                    if (key)                                         //키가 null이 아니라면
+                    {
+                        Debug.Log("키를 주웠다!");
+                        m_isGetKey = true;                          //키 트루 활성화
                         key.PickUpKey();
+                        //m_JoDoor.HiddenDoorOpen();
 					}
 				}
+
+                
+            }
+            else if (Input.GetMouseButtonUp(0))                                                  //만약 윗 문장이 충족되지 않고 이 문장만 충족되었다면
+            {
+                m_door = null;
+                Camera.main.GetComponent<FirstPersonCamera>().enabled = true;                   //카메라 활성화
             }
         }
-        else if(Input.GetMouseButtonUp(0))                                                  //만약 윗 문장이 충족되지 않고 이 문장만 충족되었다면
-        {
-            m_door = null;
-            Camera.main.GetComponent<FirstPersonCamera>().enabled = true;                   //카메라 활성화
-        }
+        
 
 
         if(m_door)                                                                          //
@@ -101,6 +143,9 @@ public class Player : MonoBehaviour
 
             m_door.AddYaw(mouseY * 180f * Time.deltaTime);
         }
+        
+        
+        
     }
 
     //public void UpdateObjectInput()
