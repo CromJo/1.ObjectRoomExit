@@ -18,14 +18,23 @@ public class Player : MonoBehaviour
     public bool IsGetKey { get { return m_isGetKey; } set { m_isGetKey = value; } }
     // Start is called before the first frame update
 
+    //문관련
     InteractionDoor m_door;
     Door m_JoDoor;
+
+    //손전등 관련
+    FlashLight m_FlashLight;
+    [SerializeField] GameObject m_FlashLightObj;
+    
+    bool m_isEquip;
+    public bool isEquip { get { return m_isEquip; } set { m_isEquip = value; } }
 
     void Start()
     {
         m_Rigidbody = GetComponent<Rigidbody>();
 
         m_JoDoor = GameObject.Find("connectorFloor1-1").GetComponentInChildren<Door>();
+
     }
 
 
@@ -42,6 +51,7 @@ public class Player : MonoBehaviour
         //UpdateObjectInput();
     }
     
+
 
     public void UpdateMoveInput()
     {
@@ -125,7 +135,23 @@ public class Player : MonoBehaviour
 					}
 				}
 
-                
+                if(hit.collider.CompareTag("FlashLight"))
+                {
+                    FlashLight flashlight = hit.collider.GetComponent<FlashLight>();
+                    if(flashlight)
+                    {
+                        m_isEquip = true;
+                        //flashlight.
+					}
+
+                    
+                    //transform.rotation = Quaternion.Euler(new Vector3(m_FlashLightObj.position.x, m_FlashLightObj.position.y, m_FlashLightObj.position.z));
+                    //Vector3 dir = transform.Find("FlashLightEquip").position - transform.position;
+                    //
+                    //Quaternion targetRotation = Quaternion.LookRotation(dir);               //방향으로 쳐다보기
+                    //transform.rotation = targetRotation;                                                    
+
+                }
             }
             else if (Input.GetMouseButtonUp(0))                                                  //만약 윗 문장이 충족되지 않고 이 문장만 충족되었다면
             {
@@ -148,35 +174,36 @@ public class Player : MonoBehaviour
         
     }
 
-    //public void UpdateObjectInput()
-    //{
-    //    if (Input.GetMouseButtonDown(0))
-    //    {
-    //        ray = new Ray(m_RayPos.transform.position, transform.forward);
-    //        
-    //        if (Physics.Raycast(ray, out hit, m_MaxDistance))
-    //        {
-    //            if(hit.collider.CompareTag("Door"))
-    //            { 
-    //                //Debug.Log(hit.transform.name);
-    //
-    //                hit.collider.gameObject.GetComponent<Door>().DoorActive();
-    //
-    //                //hit.collider.gameObject.GetComponent<Door>().IsOpen = true;
-    //
-    //                //GameObject.Find("Map").transform.Find("connectorFloor1-1").transform.Find("connectorDoor1-1-a").GetComponent<Door>().DoorActive();
-    //            }
-    //            else if(hit.collider.CompareTag("KeyDoor") && m_Key.gameObject)
-    //            {
-    //
-    //            }
-    //        }
-    //        else if(Physics.Raycast(ray, out hit, m_MaxDistance) && hit.collider.CompareTag("Key"))
-    //        {
-    //
-    //        }
-    //    }
-    //}
-    
 
-}
+        //public void UpdateObjectInput()
+        //{
+        //    if (Input.GetMouseButtonDown(0))
+        //    {
+        //        ray = new Ray(m_RayPos.transform.position, transform.forward);
+        //        
+        //        if (Physics.Raycast(ray, out hit, m_MaxDistance))
+        //        {
+        //            if(hit.collider.CompareTag("Door"))
+        //            { 
+        //                //Debug.Log(hit.transform.name);
+        //
+        //                hit.collider.gameObject.GetComponent<Door>().DoorActive();
+        //
+        //                //hit.collider.gameObject.GetComponent<Door>().IsOpen = true;
+        //
+        //                //GameObject.Find("Map").transform.Find("connectorFloor1-1").transform.Find("connectorDoor1-1-a").GetComponent<Door>().DoorActive();
+        //            }
+        //            else if(hit.collider.CompareTag("KeyDoor") && m_Key.gameObject)
+        //            {
+        //
+        //            }
+        //        }
+        //        else if(Physics.Raycast(ray, out hit, m_MaxDistance) && hit.collider.CompareTag("Key"))
+        //        {
+        //
+        //        }
+        //    }
+        //}
+
+
+    }

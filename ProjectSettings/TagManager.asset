@@ -12,6 +12,8 @@ TagManager:
   - KeyDoor
   - HiddenDoor
   - Key
+  - fourthIU
+  - FlashLight
   layers:
   - Default
   - TransparentFX
