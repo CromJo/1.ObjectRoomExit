@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 3352874150479168246}
   m_Layer: 0
   m_Name: Flashlight
-  m_TagString: Untagged
+  m_TagString: FlashLight
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -58,7 +58,6 @@ MeshRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -86,7 +85,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!95 &3352874150471825301
 Animator:
   serializedVersion: 3
@@ -118,6 +116,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 341ade3c759d29441b902368a6546bd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_FlashLight: {fileID: 0}
+  m_FlashLightGround: {fileID: 0}
 --- !u!1 &3352874151393201145
 GameObject:
   m_ObjectHideFlags: 0
@@ -208,6 +208,5 @@ Light:
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
-  m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0

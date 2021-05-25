@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
     Rigidbody m_Rigidbody;
     float m_Gravity = 300f;
 
-    float m_MaxDistance = 5f;
+    [SerializeField] float m_MaxDistance;
     [SerializeField] GameObject m_RayPos;
 
     //열쇠 관련
@@ -24,7 +24,7 @@ public class Player : MonoBehaviour
 
     //손전등 관련
     FlashLight m_FlashLight;
-    [SerializeField] GameObject m_FlashLightObj;
+    [SerializeField] Transform m_FlashLightSoket;
     
     bool m_isEquip;
     public bool isEquip { get { return m_isEquip; } set { m_isEquip = value; } }
@@ -68,8 +68,8 @@ public class Player : MonoBehaviour
         RaycastHit hit;                                                                     //변수 하나 생성
         if (Physics.Raycast(ray, out hit, m_MaxDistance))                               //광선이 앞으로 나아가며 MaxDistance만큼의 길이를 가지고 있다.
         {
+            Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward, Color.red);
             UIManager text = GameObject.Find("StateText").GetComponent<UIManager>();
-            Debug.Log("여기까지 오니?");
             
             text.UpdateState(UIManager.TextState.None);
             if (hit.collider.CompareTag("Door"))
@@ -87,14 +87,19 @@ public class Player : MonoBehaviour
                     text.UpdateState(UIManager.TextState.DoorLock);
                 }
             }
+            else if(hit.collider.CompareTag("Key") || hit.collider.CompareTag("FlashLight"))
+            {
+                text.UpdateState(UIManager.TextState.ItemEquip);
+            }
+
             if (Input.GetMouseButtonDown(0))                                                    //왼클 했을 경우
             {
                 if (hit.collider.CompareTag("Door"))                                        //태그가 도어라면 (광선이 태그에 맞았다면)
                 {
                     InteractionDoor door = hit.collider.GetComponent<InteractionDoor>();    //내가 만든 스크립트 공유된 것들을 불러오고
-                    if(door)                                                                //잘 불러와졌고
+                    if (door)                                                                //잘 불러와졌고
                     {
-                        if(door.canOpen == true)                                            //열수 있는 상태라면
+                        if (door.canOpen == true)                                            //열수 있는 상태라면
                         {
                             //text.UpdateState(UIManager.TextState.DoorOpenAndClose);
                             m_door = door;                                                  //광선에 맞은 문의 콜라이더가 미리 만든 변수에 넣어둔다
@@ -107,7 +112,7 @@ public class Player : MonoBehaviour
 
                     }
                 }
-                else if(hit.collider.CompareTag("HiddenDoor"))
+                else if (hit.collider.CompareTag("HiddenDoor"))
                 {
                     m_JoDoor = hit.collider.GetComponent<Door>();
                     if (m_JoDoor)
@@ -116,13 +121,12 @@ public class Player : MonoBehaviour
                         m_JoDoor.HiddenDoorOpen();
                         m_JoDoor.OpenAndClose();
                     }
-                    else if(!m_isGetKey)
-                    {   
+                    else if (!m_isGetKey)
+                    {
                         //text.UpdateState(UIManager.TextState.DoorLock);
                     }
                 }
-
-                if (hit.collider.CompareTag("Key"))                  //키태그를 가지고 있는거라면
+                else if (hit.collider.CompareTag("Key"))                  //키태그를 가지고 있는거라면
                 {
                     Key key = hit.collider.GetComponent<Key>();     //광선에 닿은 것의 스크립트를 키에 넣어준다
                     //m_JoDoor = hit.collider.GetComponent<Door>();
@@ -132,19 +136,21 @@ public class Player : MonoBehaviour
                         m_isGetKey = true;                          //키 트루 활성화
                         key.PickUpKey();
                         //m_JoDoor.HiddenDoorOpen();
-					}
-				}
-
-                if(hit.collider.CompareTag("FlashLight"))
+                    }
+                }
+                else if (hit.collider.CompareTag("FlashLight"))
                 {
-                    FlashLight flashlight = hit.collider.GetComponent<FlashLight>();
-                    if(flashlight)
+                    if(IsEquipFlash() == false)
                     {
-                        m_isEquip = true;
-                        //flashlight.
-					}
+                        FlashLight flashlight = hit.collider.GetComponent<FlashLight>();
+                        if (flashlight)
+                        {
+                            m_FlashLight = flashlight;
+                            flashlight.Equip(m_FlashLightSoket);
+                        }
 
-                    
+                    }
+
                     //transform.rotation = Quaternion.Euler(new Vector3(m_FlashLightObj.position.x, m_FlashLightObj.position.y, m_FlashLightObj.position.z));
                     //Vector3 dir = transform.Find("FlashLightEquip").position - transform.position;
                     //
@@ -157,6 +163,7 @@ public class Player : MonoBehaviour
             {
                 m_door = null;
                 Camera.main.GetComponent<FirstPersonCamera>().enabled = true;                   //카메라 활성화
+                
             }
         }
         
@@ -172,6 +179,11 @@ public class Player : MonoBehaviour
         
         
         
+    }
+
+    public bool IsEquipFlash()
+    {
+        return m_FlashLight != null;
     }
 
 

@@ -14,6 +14,7 @@ public class UIManager : MonoBehaviour
         DoorLock,                   //문을 못열때
         DoorOpenAndClose,               //열고 닫을때 
         GetKeyOpenDoor,                         //키얻고 문앞에 있을 때
+        ItemEquip
     }
     public TextState m_State = TextState.None;
     public TextState TextStatus { get { return m_State; } set { m_State = value; } }
@@ -44,6 +45,9 @@ public class UIManager : MonoBehaviour
                 break;
             case TextState.GetKeyOpenDoor:
                 m_Text.text = "문이 잠겨있다. 어쩌면 이 열쇠로 열 수 있을 것 같다.";
+                break;
+            case TextState.ItemEquip:
+                m_Text.text = "아이템 줍기";
                 break;
         }
     }

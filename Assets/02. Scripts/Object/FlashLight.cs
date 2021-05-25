@@ -4,23 +4,13 @@ using UnityEngine;
 
 public class FlashLight : MonoBehaviour
 {
-    [SerializeField] GameObject m_FlashLight;
-    [SerializeField] GameObject m_FlashLightGround;
-    Light m_Light;
+    public void Equip(Transform equipSoket)
+    {
+        GetComponent<MeshCollider>().enabled = false;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-    public void PickUpFlashLight()
-    {
-        gameObject.GetComponent<MeshRenderer>().enabled = false;
+        transform.SetParent(equipSoket, false);
+        transform.localPosition = Vector3.zero;
+        transform.localRotation = Quaternion.identity;
+        transform.localScale = Vector3.one;
     }
 }
