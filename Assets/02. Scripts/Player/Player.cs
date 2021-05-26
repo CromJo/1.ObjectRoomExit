@@ -40,7 +40,7 @@ public class Player : MonoBehaviour
 
     void FixedUpdate()
     {
-        m_Rigidbody.AddForce(Vector3.down * m_Gravity);
+        //m_Rigidbody.AddForce(Vector3.down * m_Gravity);
     }
 
     // Update is called once per frame

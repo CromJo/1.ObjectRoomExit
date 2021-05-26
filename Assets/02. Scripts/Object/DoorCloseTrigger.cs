@@ -45,7 +45,7 @@ public class DoorCloseTrigger : MonoBehaviour
         
     }
 
-    private void OnTriggerExit(MeshCollider other)
+    private void OnTriggerExit(Collider other)
     {
         gameObject.GetComponent<MeshCollider>().enabled = false;
     }
