@@ -68,13 +68,13 @@ public class Player : MonoBehaviour
         RaycastHit hit;                                                                     //변수 하나 생성
         if (Physics.Raycast(ray, out hit, m_MaxDistance))                               //광선이 앞으로 나아가며 MaxDistance만큼의 길이를 가지고 있다.
         {
-            Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward, Color.red);
-            UIManager text = GameObject.Find("StateText").GetComponent<UIManager>();
+            Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward, Color.red);            //바라보는 시점의으로 레이저를 쏘는것을 표시.(인게임에서는 안보임)
+            UIManager text = GameObject.Find("StateText").GetComponent<UIManager>();                            //
             
-            text.UpdateState(UIManager.TextState.None);
-            if (hit.collider.CompareTag("Door"))
+            text.UpdateState(UIManager.TextState.None);                                                         //기본 상태 
+            if (hit.collider.CompareTag("Door"))                                                                //만약 태그가 도어인 곳에 광선이 닿았을 경우 
             {
-                text.UpdateState(UIManager.TextState.DoorOpenAndClose);
+                text.UpdateState(UIManager.TextState.DoorOpenAndClose);                                         //특정 텍스트 출력
             }
             else if(hit.collider.CompareTag("HiddenDoor") || hit.collider.CompareTag("KeyDoor"))
             {

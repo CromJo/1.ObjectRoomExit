@@ -38,16 +38,16 @@ public class DoorCloseTrigger : MonoBehaviour
             }
 
             //열리는 스크립트
-            AutoDoor autoDoor = GameObject.FindWithTag("KeyDoor").GetComponent<AutoDoor>();
-            autoDoor.AutoOpenDoor();
+            //AutoDoor autoDoor = GameObject.FindWithTag("KeyDoor").GetComponent<AutoDoor>();
+            //autoDoor.AutoOpenDoor();
         }
 
         
     }
 
-    private void OnTriggerExit(Collider other)
+    private void OnTriggerExit(Collider other)                                      //닿은 부분을 나갔을 경우
     {
-        gameObject.GetComponent<MeshCollider>().enabled = false;
+        gameObject.GetComponent<MeshCollider>().enabled = false;                    //비활성화
     }
 
     //public abstract void AutoMaticCloseDoor(Vector3 point);

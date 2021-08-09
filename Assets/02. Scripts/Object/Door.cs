@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Door : MonoBehaviour
 {
-    float m_DoorOpen = 90f;         //열리면 Transform Rotation Y값을 90으로 만들 변수
+    float m_DoorOpen = 120f;         //열리면 Transform Rotation Y값을 90으로 만들 변수
     float m_DoorClose = 0f;         //닫히면 Transform Rotation Y값을 0으로 만들 변수
     float m_MaxDistance = 5f;       //사거리
     float m_OpenCloseTime = 1f;     //열리는 시간
@@ -19,7 +19,7 @@ public class Door : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (gameObject.name.EndsWith("b")) m_DoorOpen = -90f;
+        if (gameObject.name.EndsWith("B")) m_DoorOpen = -120f;
         m_Player = GameObject.Find("FPSController").GetComponent<Player>();
     }
 
@@ -27,7 +27,6 @@ public class Door : MonoBehaviour
     void Update()
     {
         OpenAndClose();                                                               //지금 여기가 업데이트기 떄문에 계속들어옴 그런데 2번째부터 갑자기 m_isOpen이 비활성화가 됨 어찌 된 일?
-
     }
     
     
